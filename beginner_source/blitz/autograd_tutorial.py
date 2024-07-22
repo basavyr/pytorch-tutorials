@@ -43,8 +43,12 @@ shape (1,1000).
     This tutorial works only on the CPU and will not work on GPU devices (even if tensors are moved to CUDA).
 
 """
+
+from torch import nn, optim
 import torch
 from torchvision.models import resnet18, ResNet18_Weights
+
+
 model = resnet18(weights=ResNet18_Weights.DEFAULT)
 data = torch.rand(1, 3, 64, 64)
 labels = torch.rand(1, 1000)
@@ -54,7 +58,7 @@ labels = torch.rand(1, 1000)
 # This is the **forward pass**.
 #
 
-prediction = model(data) # forward pass
+prediction = model(data)  # forward pass
 
 ############################################################
 # We use the model's prediction and the corresponding label to calculate the error (``loss``).
@@ -64,7 +68,7 @@ prediction = model(data) # forward pass
 #
 
 loss = (prediction - labels).sum()
-loss.backward() # backward pass
+loss.backward()  # backward pass
 
 ############################################################
 # Next, we load an optimizer, in this case SGD with a learning rate of 0.01 and `momentum <https://towardsdatascience.com/stochastic-gradient-descent-with-momentum-a84097641a5d>`__ of 0.9.
@@ -77,7 +81,7 @@ optim = torch.optim.SGD(model.parameters(), lr=1e-2, momentum=0.9)
 # Finally, we call ``.step()`` to initiate gradient descent. The optimizer adjusts each parameter by its gradient stored in ``.grad``.
 #
 
-optim.step() #gradient descent
+optim.step()  # gradient descent
 
 ######################################################################
 # At this point, you have everything you need to train your neural network.
@@ -97,7 +101,6 @@ optim.step() #gradient descent
 # ``requires_grad=True``. This signals to ``autograd`` that every operation on them should be tracked.
 #
 
-import torch
 
 a = torch.tensor([2., 3.], requires_grad=True)
 b = torch.tensor([6., 4.], requires_grad=True)
@@ -210,7 +213,6 @@ print(-2*b == b.grad)
 #
 
 
-
 ######################################################################
 # Computational Graph
 # ~~~~~~~~~~~~~~~~~~~
@@ -279,7 +281,6 @@ print(f"Does `b` require gradients?: {b.requires_grad}")
 # In finetuning, we freeze most of the model and typically only modify the classifier layers to make predictions on new labels.
 # Let's walk through a small example to demonstrate this. As before, we load a pretrained resnet18 model, and freeze all the parameters.
 
-from torch import nn, optim
 
 model = resnet18(weights=ResNet18_Weights.DEFAULT)
 
